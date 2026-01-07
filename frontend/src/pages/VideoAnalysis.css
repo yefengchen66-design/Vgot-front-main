@@ -1,0 +1,771 @@
+/* Apply new layout variables */
+.video-analysis-page {
+  padding: 40px 50px;
+}
+
+.analysis-container {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.analysis-left {
+  flex: 7;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.analysis-right {
+  flex: 3;
+  position: sticky;
+  top: 24px;
+}
+
+/* Base Card Style */
+.glass-card {
+  background: var(--color-bg-card);
+  border-radius: var(--border-radius-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Applying card style to main containers */
+.analysis-input-section,
+.analysis-options {
+  padding: 24px; /* Reset padding for consistency */
+}
+
+.analysis-right {
+  padding: 24px;
+  height: 600px; /* 固定高度，防止变化 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 统一所有模式的结果区域高度（移除 scene 单独高度）*/
+.analysis-right.scene-mode {
+  height: 600px; /* 与默认一致，保持三个模式统一 */
+}
+
+
+/* Input Sections */
+.upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px 20px; /* 移除图标后减少内边距 */
+  min-height: 140px; /* 图标移除后缩减高度 */
+  border: 2px dashed var(--color-border-default);
+  border-radius: var(--border-radius-input);
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  gap: 10px; /* 标题与其他元素间距 */
+}
+
+/* 空状态增加高度与视觉呼吸感 */
+.upload-area.empty {
+  min-height: 180px;
+}
+
+/* 预览状态收缩高度，靠视频自身撑开 */
+.upload-area.has-preview {
+  min-height: 100px;
+  padding: 16px 16px;
+}
+
+.upload-area:hover {
+  border-color: var(--color-accent-purple);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.45);
+  background-color: rgba(168, 85, 247, 0.05);
+}
+
+.upload-area.dragging {
+  border-color: var(--color-accent-purple);
+  background-color: rgba(168, 85, 247, 0.1);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+}
+
+.upload-area .va-upload-icon svg {
+  font-size: 32px;
+  color: var(--color-text-secondary);
+  transition: color 0.3s ease;
+}
+
+.upload-area:hover .va-upload-icon svg {
+  color: var(--color-accent-purple);
+}
+
+.upload-area h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin: 0; /* 移除默认外边距，搭配gap保持稳定 */
+}
+
+.file-input {
+  display: none;
+}
+
+.url-input-section label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.input, .rewrite-textarea {
+  width: 100%;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-default);
+  color: var(--color-text-primary);
+  border-radius: var(--border-radius-input);
+  padding: 12px 14px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input::placeholder, .rewrite-textarea::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.input:hover, .rewrite-textarea:hover {
+  border-color: var(--color-border-hover);
+}
+
+.input:focus, .rewrite-textarea:focus {
+  outline: none;
+  border-color: var(--color-border-active);
+  box-shadow: var(--glow-border-purple);
+}
+
+/* Analysis Options */
+.analysis-options h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.option-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.option-card {
+  padding: 20px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--border-radius-input);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.option-card:hover {
+  border-color: var(--color-accent-purple);
+  transform: translateY(-3px);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+}
+
+.option-card.active {
+  border-color: var(--color-accent-purple);
+  background: rgba(168, 85, 247, 0.1);
+  box-shadow: var(--glow-border-purple);
+}
+
+.option-card h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.option-card p {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* Results Area */
+.result-placeholder, .result-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  flex: 1; /* 填满剩余空间 */
+  text-align: center;
+}
+
+.result-placeholder h3, .result-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--color-text-primary);
+  flex-shrink: 0; /* 标题不缩放 */
+}
+
+.result-placeholder p, .result-loading p {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.result-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* 允许内部浮动按钮定位 */
+  padding-bottom: 44px; /* 为浮动清除按钮预留空间，避免文本阴影或滚动区域覆盖 */
+  box-sizing: border-box;
+}
+
+.result-merged {
+  background: var(--color-bg-primary);
+  border-radius: var(--border-radius-input);
+  padding: 20px;
+  flex: 1; /* 自适应剩余高度 */
+  overflow-y: auto;
+  border: 1px solid var(--color-border-default);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Scene 模式下滚动条样式（参考 SuperIP 历史图库）*/
+.analysis-right.scene-mode .result-merged {
+  scrollbar-width: none; /* Firefox 默认隐藏 */
+}
+.analysis-right.scene-mode .result-merged::-webkit-scrollbar {
+  width: 0; /* WebKit 默认隐藏 */
+  height: 0;
+}
+
+/* 当用户滚动时显示滚动条：通过添加 .scrolling 类（可后续在JS中监听 scroll 动态添加）*/
+.analysis-right.scene-mode .result-merged.scrolling {
+  scrollbar-width: thin; /* Firefox 显示细条 */
+  scrollbar-color: var(--color-border-hover) rgba(255,255,255,0.06);
+}
+.analysis-right.scene-mode .result-merged.scrolling::-webkit-scrollbar {
+  width: 10px;
+}
+.analysis-right.scene-mode .result-merged.scrolling::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+}
+.analysis-right.scene-mode .result-merged.scrolling::-webkit-scrollbar-thumb {
+  background: var(--color-border-hover);
+  border-radius: 8px;
+}
+
+/* 基础细滚动条（未使用隐藏逻辑时的备用：直接显示简洁条）*/
+.analysis-right.scene-mode .result-merged::-webkit-scrollbar-thumb {
+  background: var(--color-border-default);
+  border-radius: 3px;
+}
+.analysis-right.scene-mode .result-merged::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
+}
+
+.merged-text {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  line-height: var(--line-height-base);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Spinner for Loading */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #334155; /* Dark grey track for better visibility */
+  border-top-color: #a855f7; /* Purple accent */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .analysis-container {
+    flex-direction: column;
+  }
+  .analysis-right {
+    position: static;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .video-analysis-page {
+    padding: 30px 20px;
+  }
+
+  .option-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Missing styles for rewrite functionality */
+.rewrite-block {
+  width: 100%;
+}
+
+.rewrite-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: -1px; /* 与卡片上边线距离减小1px */
+  margin-bottom: 15px; /* 与文本框距离减小1px */
+  color: var(--color-text-primary);
+}
+
+.textarea-container {
+  position: relative;
+  margin-bottom: 3px; /* 与卡片间距3px */
+}
+
+.rewrite-textarea {
+  /* 由父列控制高度，自己填满即可 */
+  min-height: 0;
+  height: 100%;
+  resize: none;
+  font-family: inherit;
+  padding-bottom: 50px; /* 为底部清除按钮留出空间 */
+  /* 允许在左列内伸展以便两列等高 */
+  display: block;
+  width: 100%;
+}
+
+.rewrite-actions {
+  position: absolute;
+  bottom: 0; /* 与文本框的距离为0 */
+  right: 0;  /* 与文本框的距离为0 */
+  margin: 0;
+  transform: translate(0, 100%); /* 紧贴在文本框外侧下方，距离为0 */
+}
+
+/* 清除按钮：无背景色，内边距为0，文字紧贴 */
+.video-analysis-page .rewrite-actions .button-secondary {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important; /* 按钮与文字的距离为0 */
+  border-radius: 0;
+}
+
+.video-analysis-page .rewrite-actions .button-secondary:hover {
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Button styles matching system theme (scoped to page to avoid App.css overrides) */
+.video-analysis-page .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--border-radius-button);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  border: none;
+  outline: none;
+}
+
+.video-analysis-page .button-primary {
+  background: var(--gradient-button-primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-button);
+  border-radius: 6px; /* 微微圆角 */
+}
+
+.video-analysis-page .button-primary:hover {
+  box-shadow: var(--glow-button-hover);
+  transform: translateY(-2px);
+}
+
+.video-analysis-page .button-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-button);
+}
+
+.video-analysis-page .button-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-button);
+}
+
+.video-analysis-page .button-secondary {
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  border: none; /* 移除边框线 */
+  padding: 8px 12px; /* 调整内边距 */
+  font-size: 0.9rem;
+  border-radius: 6px;
+}
+
+.video-analysis-page .button-secondary:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-card);
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.15); /* 使用主题紫色光影 */
+  transform: translateY(-1px);
+}
+
+.video-analysis-page .button-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Copy button and result text container */
+.text-with-copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.merged-text {
+  flex: 1;
+  margin: 0;
+  padding-right: 0; /* 不再需要为右上角按钮留空间 */
+}
+
+/* 结果区域底部右侧的复制按钮，跟随文本末尾出现 */
+.result-actions[data-position="corner"] {
+  position: static; /* 取消绝对定位 */
+  align-self: flex-end; /* 右侧对齐 */
+  margin-top: 12px; /* 与文本保持间距 */
+  z-index: 2;
+}
+
+.video-analysis-page .icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0px; /* 按钮内边距减小到0px */
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  border: none; /* 隐藏边缘轮廓 */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.video-analysis-page .icon-button:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+.video-analysis-page .icon-button:active {
+  transform: scale(0.98);
+}
+
+/* 修正脚本改写标题与其他元素的间距 */
+.rewrite-block {
+  margin-bottom: 24px; /* 与卡片之间保持相同距离 */
+}
+
+/* 浮动清除按钮：位于结果框外侧右下角微上移 */
+.clear-result-floating {
+  position: absolute;
+  bottom: 15px; /* 垂直居中于预留的 44px 高度空间: (44px - ~14px文字高)/2 ≈ 15px */
+  right: 16px;
+  background: transparent; /* 去掉背景 */
+  color: var(--color-text-secondary);
+  border: none; /* 去掉边界 */
+  padding: 0; /* 仅文字 */
+  font-size: 0.85rem;
+  line-height: 1; /* 紧凑 */
+  cursor: pointer;
+  transition: color 0.15s ease;
+  box-shadow: none;
+  z-index: 3;
+}
+
+.clear-result-floating:hover {
+  color: var(--color-text-primary);
+}
+
+.clear-result-floating:active {
+  color: var(--color-accent-purple);
+}
+
+/* 上传区域图标和文字间距调整 - 统一样式定义 */
+/* 提高选择器优先级，避免首次加载或跨页切换时被全局样式覆盖 */
+.video-analysis-page .upload-area .va-upload-icon {
+  margin-bottom: 0 !important; /* 由gap控制间距，避免双重间距 */
+  display: block;
+}
+
+.video-analysis-page .upload-area h3 {
+  margin: 0 !important; /* 移除默认margin，保证稳定 */
+  line-height: 1.25;
+}
+
+/* 文件信息样式优化 */
+.file-info {
+  margin-top: 16px;
+  padding: 8px 12px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid var(--color-accent-purple);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+}
+
+.clear-file-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-file-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-primary);
+}
+
+/* 视频预览样式 */
+.video-preview-wrapper {
+  width: 100%;
+  margin-top: 16px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+.video-preview {
+  width: 100%;
+  height: 220px; /* 缩小高度 */
+  display: block;
+  background: #000;
+  object-fit: contain; /* 保持纵向视频完整显示 */
+}
+
+.video-preview::-webkit-media-controls-panel {
+  background: rgba(0,0,0,0.3);
+}
+
+/* 右上角清除按钮 */
+.clear-preview-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: none;
+  width: 26px;
+  height: 26px;
+  line-height: 24px;
+  font-size: 18px;
+  font-weight: 400;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background .2s ease, transform .2s ease;
+  z-index: 20;
+}
+
+.clear-preview-btn:hover {
+  background: rgba(168,85,247,0.75);
+  transform: scale(1.05);
+}
+
+.clear-preview-btn:active {
+  transform: scale(0.95);
+}
+
+/* Columns inside the rewrite block: left = textarea, right = image preview/upload */
+.rewrite-columns {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  /* 统一左右列最低高度 */
+  --rewrite-box-height: 240px;
+}
+
+.rewrite-column {
+  flex: 1 1 50%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* 统一列的最小高度 */
+  min-height: var(--rewrite-box-height);
+}
+
+/* 强制左列作为弹性容器，textarea 填满可用高度 */
+.rewrite-column-left {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+.rewrite-column-left .textarea-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0; /* 允许在 flex 容器内缩放 */
+}
+.rewrite-column-left .rewrite-textarea {
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0; /* 覆盖 min-height，使用 flex 控制高度 */
+  box-sizing: border-box;
+}
+
+
+
+.rewrite-column-right {
+  /* right column: center content and keep preview responsive */
+  justify-content: flex-start;
+  display: flex; /* ensure right column is a flex container so children can stretch */
+}
+
+@media (max-width: 1024px) {
+  .rewrite-columns {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* Tweak upload-area inside rewrite column to match scene-analysis style but constrained */
+.rewrite-column-right .upload-area {
+  padding: 20px 18px;
+  border-radius: 12px;
+  border: 2px dashed var(--color-border-default);
+  /* 固定高度，不会因为内容变化 */
+  min-height: var(--rewrite-box-height);
+  max-height: var(--rewrite-box-height);
+  height: var(--rewrite-box-height);
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 3px;
+  align-self: stretch;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .3s ease, box-shadow .3s ease, background-color .3s ease;
+}
+
+.rewrite-column-right .upload-area.has-file {
+  padding: 0;
+  border-style: solid; /* Optional: make border solid when image is present */
+}
+
+/* 恢复原悬浮特效并增加轻微外发光动画 */
+.rewrite-column-right .upload-area:hover {
+  border-color: var(--color-accent-purple);
+  box-shadow: 0 0 16px rgba(168,85,247,0.55), inset 0 0 8px rgba(168,85,247,0.25);
+  background-color: rgba(168,85,247,0.06);
+}
+
+/* 额外的动态光晕（可选），在悬浮时循环动画 */
+.rewrite-column-right .upload-area::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, rgba(168,85,247,0.25), transparent 70%);
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.rewrite-column-right .upload-area:hover::after {
+  opacity: 1;
+  animation: rewriteGlow 2.8s linear infinite;
+}
+
+@keyframes rewriteGlow {
+  0% { opacity: .25; transform: scale(1); }
+  50% { opacity: .55; transform: scale(1.03); }
+  100% { opacity: .25; transform: scale(1); }
+}
+
+/* 左侧 textarea 容器也撑满列高度，以便两列高度一致 */
+.rewrite-column-left .textarea-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.rewrite-column-left .rewrite-textarea {
+  flex: 1 1 auto;
+}
+
+.rewrite-column-right .upload-area .va-upload-icon svg {
+  width: 44px;
+  height: 44px;
+}
+
+.rewrite-column-right .upload-area h3 {
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+.rewrite-column-right .upload-area .file-input {
+  display: none; /* we trigger via label or container click */
+}
+
+/* Remove the image preview rule since we're not showing images */
+/* Keep file-info styling for uploaded file name display */
+.rewrite-column-right .upload-area .file-info {
+  margin-top: 0; /* Already using gap from parent */
+  padding: 8px 12px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid var(--color-accent-purple);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+/* 图片预览专用样式 */
+.rewrite-column-right .upload-area .file-info img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  /* 确保图片不会撑大容器 */
+  flex-shrink: 1;
+}

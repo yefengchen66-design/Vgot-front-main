@@ -1,0 +1,828 @@
+.video-generation-page {
+  padding: 60px 80px;
+  /* 让原生选择器、日期选择等控件采用系统深色弹层（Windows/Chromium/Firefox） */
+  color-scheme: dark;
+}
+
+.generation-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--color-border-default);
+  padding-bottom: 12px;
+}
+
+.tab-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* 轻量图标样式，让标签更有辨识度 */
+.tab-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tab-button:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-card);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.15);
+}
+
+.tab-button.active {
+  color: var(--color-text-primary);
+  background: var(--color-bg-card);
+  border-color: var(--color-border-hover);
+  box-shadow: var(--glow-border-purple);
+}
+
+/* 视频对比播放栏 */
+.video-compare-section {
+  margin-bottom: 32px;
+  background: var(--color-bg-card);
+  border-radius: var(--border-radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-default);
+}
+
+.compare-container {
+  display: flex;
+  width: 100%;
+  height: 300px; /* 固定高度，确保两侧一致 */
+  position: relative;
+}
+
+.compare-video-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+  justify-content: center; /* 水平居中对齐 */
+  background: #000;
+  overflow: hidden;
+}
+
+.compare-left {
+  border-right: none; /* 移除左侧视频的右边界 */
+}
+
+.compare-right {
+  border-left: none; /* 移除右侧视频的左边界 */
+}
+
+.compare-label {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--color-text-primary);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  letter-spacing: 0.5px;
+}
+
+.compare-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 使用 cover 填满容器 */
+  background: #000;
+  display: block;
+}
+
+/* 响应式调整 */
+@media (max-width: 900px) {
+  .compare-container {
+    flex-direction: column;
+    min-height: auto;
+  }
+  
+  .compare-left {
+    border-right: none;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  
+  .compare-right {
+    border-left: none;
+  }
+  
+  .compare-video-wrapper {
+    min-height: 300px;
+  }
+}
+
+.generation-content {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 8px;
+}
+
+.gen-left {
+  /* 固定左侧列宽，禁止因右侧扩张而被压缩 */
+  width: 360px; /* 左侧窄列 */
+  flex: 0 0 360px; /* 不允许缩放，固定占位 */
+  background: var(--color-bg-card);
+  border-radius: var(--border-radius-card);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-default);
+}
+
+.generation-form {
+  max-width: 100%;
+}
+
+.gen-right {
+  /* 扩大右侧展示区域：自适应剩余空间，并增加高度 */
+  width: auto;
+  height: 720px; /* 桌面端更高一些，便于查看生成结果 */
+  flex: 1 1 auto; /* 占用剩余空间，允许自身内容在容器内收缩 */
+  min-width: 0; /* 允许内部内容缩小，避免撑破容器引起左侧被挤压 */
+  background: var(--color-bg-card);
+  border-radius: var(--border-radius-card);
+  padding: 28px;
+  overflow: hidden; /* 内容面板内部滚动 */
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 视频增强页使用与图生视频相同大小的结果区域 */
+.gen-right.enhance {
+  height: 720px;
+  padding: 28px;
+  flex: 1 1 auto;
+  max-width: none;
+}
+
+.result-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center; /* 居中对齐 */
+  justify-content: center;
+  overflow: hidden; /* 隐藏溢出，内部面板控制滚动 */
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  height: 100%;
+}
+
+.result-title {
+  color: var(--color-text-primary);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.result-hint {
+  color: var(--color-text-secondary);
+}
+
+.form-group {
+  margin-bottom: 28px;
+}
+
+/* Textarea/Input theme unification */
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 14px;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--border-radius-input);
+  resize: none; /* 禁止拖拽拉伸高度（和宽度） */
+  font-size: 0.95rem;
+  line-height: var(--line-height-base);
+}
+
+.textarea::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.textarea:hover { border-color: var(--color-border-hover); }
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-border-active);
+  box-shadow: var(--glow-border-purple);
+}
+
+.controls-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.controls-row .control-item {
+  flex: 1;
+  min-width: 0; /* allow shrinking */
+}
+
+/* make the first select a bit wider so long model names like sora-2-pro fully display */
+.controls-row .control-item:first-child {
+  flex: 1.3;
+}
+
+/* slightly reduce middle and last items to keep balanced spacing */
+.controls-row .control-item:nth-child(2),
+.controls-row .control-item:nth-child(3) {
+  flex: 1;
+}
+
+/* ensure labels and inputs inside control-item keep spacing */
+.controls-row .form-group label {
+  margin-bottom: 6px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--color-text-secondary);
+}
+
+.task-info {
+  margin-top: 24px;
+  padding: 16px;
+  background: #0f0f0f;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.status-text {
+  color: #f5f5dc;
+  margin-top: 8px;
+}
+
+.result-section {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.result-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.result-media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  position: relative; /* 允许覆盖层 */
+}
+
+.result-media video,
+.result-media img {
+  /* 等比例缩放,完全适配固定容器 */
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain; /* 保持宽高比,完整显示在容器内 */
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  background: #000; /* 视频背景色 */
+}
+
+/* 生成中：闪烁遮罩（Shimmer/Flicker Overlay） */
+.video-generation-page .result-media.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  /* 优化渐变：两端透明，中间亮，宽度适中，确保无缝循环 */
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(168, 85, 247, 0.25) 45%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(168, 85, 247, 0.25) 55%,
+    transparent 80%
+  );
+  /* 初始位置在容器左侧外 */
+  transform: translateX(-100%);
+  /* 缩短时间至 1.2s 提高频率，linear 确保匀速 */
+  animation: vg-shimmer-slide 1.2s infinite linear;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+@keyframes vg-shimmer-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* 运行中卡片边框红色高亮（与示例图一致），仅在本页面作用 */
+.video-generation-page .task-card.status-running {
+  border: 2px solid rgba(255, 90, 90, 0.85);
+  box-shadow: 0 0 16px rgba(255, 90, 90, 0.35);
+}
+
+.download-link {
+  padding: 10px 20px;
+  background: #f5f5dc;
+  color: #0a0a0a;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.download-link:hover {
+  background: #e8dcc4;
+  transform: translateY(-2px);
+}
+
+/* 响应式：窄屏时左右改为上下 */
+@media (max-width: 900px) {
+  .generation-content {
+    flex-direction: column;
+  }
+  .gen-left {
+    width: 100%;
+  }
+  .gen-right {
+    width: 100%;
+    height: 400px; /* 小屏幕时调整高度 */
+    min-height: 320px;
+  }
+  .controls-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  /* shorter fixed height on mobile */
+  .image-upload-area,
+  .image-upload-area.has-image {
+    height: 160px;
+    min-height: 160px;
+    max-height: 160px;
+  }
+}
+
+/* 新增样式 */
+.select-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px; /* 圆角但不过分夸张 */
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  box-shadow: none; /* 去掉厚重阴影 */
+  /* 使用系统原生下拉样式（含箭头/弹层），避免过度自定义导致不一致 */
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+}
+
+.select-input:hover {
+  background: var(--color-bg-primary);
+  border-color: var(--color-border-hover);
+}
+
+.select-input:focus {
+  outline: none;
+  background: var(--color-bg-primary);
+  border-color: var(--color-border-active);
+  box-shadow: none; /* 去掉紫色光晕 */
+}
+
+.select-input:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background: var(--color-bg-card);
+  border-color: var(--color-border-default);
+}
+
+.checkbox-group {
+  margin-bottom: 20px;
+  padding: 14px;
+  background: var(--color-bg-primary);
+  border-radius: var(--border-radius-input);
+  border: 1px solid var(--color-border-default);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-accent-purple);
+}
+
+.hint-text {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #999;
+  margin-left: 0;
+  padding-left: 28px;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.button-primary {
+  flex: 2;
+  padding: 14px 28px;
+  background: var(--gradient-button-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: var(--shadow-button);
+}
+
+.button-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-button-hover);
+}
+
+.button-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-secondary {
+  flex: 1;
+  padding: 14px 20px;
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-hover);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.button-secondary:hover:not(:disabled) {
+  background: var(--color-bg-card);
+  border-color: var(--color-accent-purple);
+}
+
+.button-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 图片上传区域 */
+.video-generation-page .image-upload-area {
+  position: relative;
+  width: 100%;
+  /* Fixed height so uploaded images scale to fit without expanding the box */
+  height: 150px;
+  min-height: 150px;
+  max-height: 150px;
+  border: 2px dashed var(--color-border-default);
+  border-radius: 12px;
+  background: var(--color-bg-primary);
+  cursor: pointer;
+  transition: all 0.3s;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-generation-page .image-upload-area:hover {
+  border-color: var(--color-accent-purple); /* 悬浮时边框变紫 */
+  background: var(--color-bg-card);
+  /* 更明显的“雾化”光晕效果，参考导航按钮 */
+  box-shadow:
+    0 0 20px rgba(168, 85, 247, 0.35), /* 外部紫色柔光更强 */
+    0 8px 24px rgba(0, 0, 0, 0.35),     /* 外部阴影增强层次 */
+    inset 0 0 36px rgba(168, 85, 247, 0.16), /* 内部雾感更明显 */
+    inset 0 0 48px rgba(0, 0, 0, 0.45);      /* 深色融合增强 */
+  backdrop-filter: blur(6px); /* 叠加微弱模糊提升“雾”感 */
+}
+
+.video-generation-page .image-upload-area.dragging {
+  border-color: var(--color-accent-purple);
+  background: rgba(168,85,247,0.08);
+}
+
+.video-generation-page .image-upload-area.has-image {
+  cursor: default;
+  border-style: solid;
+  border-color: var(--color-border-default);
+  /* 限制已上传图片时的区域高度，避免极高图片撑开页面 */
+  /* Keep same fixed height after image uploaded */
+  height: 180px;
+  min-height: 180px;
+  max-height: 180px;
+  overflow: hidden;
+}
+
+/* 上传后也保留悬浮高亮效果，视觉与未上传状态一致 */
+.video-generation-page .image-upload-area.has-image:hover {
+  border-color: var(--color-accent-purple);
+  background: var(--color-bg-card);
+  /* 上传后悬浮同样保留更明显的“雾感”光晕 */
+  box-shadow:
+    0 0 20px rgba(168, 85, 247, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    inset 0 0 36px rgba(168, 85, 247, 0.16),
+    inset 0 0 48px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+}
+
+.video-generation-page .upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.video-generation-page .upload-icon-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-generation-page .upload-icon {
+  font-size: 24px; /* 缩小至更接近图一 */
+  color: #617c8de8; /* 默认改为中性灰，按需求 */
+  display: block;
+  stroke-width: 1.5;
+  transition: color 0.25s ease, filter 0.25s ease;
+  filter: none;
+}
+
+/* 悬浮/拖拽时使用页面设计的强调色（作用域限定在本页面） */
+.video-generation-page .image-upload-area:hover .upload-icon,
+.video-generation-page .image-upload-area.dragging .upload-icon {
+  color: var(--color-accent-purple);
+}
+
+.video-generation-page .upload-icon-wrapper::after {
+  content: '+';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 20px; /* 还原更小的角标尺寸 */
+  height: 20px;
+  background: #f5f5dc;
+  color: #0a0a0a;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.video-generation-page .upload-text {
+  font-size: 14px; /* 下调一号 */
+  color: #ffffff; /* 纯白 */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  letter-spacing: 0.2px;
+  margin-bottom: 8px;
+  font-weight: 600; /* 稍微更粗一点提升可读性 */
+  text-align: center;
+}
+
+.video-generation-page .upload-hint {
+  font-size: 12px; /* 下调一号 */
+  color: #9aa0a6; /* 稍微更亮一点的灰，便于阅读 */
+  text-align: center;
+}
+
+.video-generation-page .uploaded-image-preview {
+  position: relative;
+  width: 100%;
+  /* preview 填满上传区域，图片通过 max-height:100% 受限 */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* 背景为深色，未占满的宽度区域用阴影填充 */
+  background: #0a0a0a;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
+}
+
+.video-generation-page .uploaded-image-preview img {
+  /* 等比缩放，并在容器内居中显示，避免拉伸 */
+  max-width: none; /* 由高度限制，宽度自适应 */
+  max-height: 100% !important;
+  width: auto;     /* 宽度自适应，保持比例 */
+  height: 100% !important;    /* 高度贴合容器高度 */
+  object-fit: contain; /* 保持比例 */
+  display: block;
+  margin: 0 auto;
+  border-radius: 0; /* 上传成功后图片不要圆角 */
+}
+
+/* 取消按钮样式，沿用脚本改写页面的风格 */
+.video-generation-page .clear-preview-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: none;
+  width: 26px;
+  height: 26px;
+  line-height: 24px;
+  font-size: 18px;
+  font-weight: 400;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background .2s ease, transform .2s ease;
+  z-index: 20;
+}
+
+.video-generation-page .clear-preview-btn:hover {
+  background: rgba(168,85,247,0.75);
+  transform: scale(1.05);
+}
+
+.video-generation-page .clear-preview-btn:active {
+  transform: scale(0.95);
+}
+
+/* 上传后覆盖层操作区（更换/移除），轻量按钮样式 */
+.video-generation-page .uploaded-overlay-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.video-generation-page .uploaded-overlay-actions .replace-btn,
+.video-generation-page .uploaded-overlay-actions .remove-image-btn {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.video-generation-page .uploaded-overlay-actions .replace-btn:hover,
+.video-generation-page .uploaded-overlay-actions .remove-image-btn:hover {
+  background: rgba(168,85,247,0.7);
+  transform: translateY(-1px);
+}
+
+.video-generation-page .remove-image-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.video-generation-page .remove-image-btn:hover {
+  background: rgba(255, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+.video-generation-page .upload-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #2a2a2a;
+}
+
+.video-generation-page .progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #5a9fd4, #f5f5dc);
+  transition: width 0.3s;
+}
+
+.video-generation-page .progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+/* Loading state in right panel */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #cfcfcf;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #2a2a2a;
+  border-top: 2px solid #f5f5dc;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 10px;
+}
+
+.loading-text {
+  font-size: 14px;
+  color: #bfbfbf;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Make media inside .result-media fit nicely to the right panel */
+.result-media video,
+.result-media img {
+  /* 等比例缩小以适配固定容器 */
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  background: #000; /* 防止视频黑边看起来突兀 */
+}
+
+
+

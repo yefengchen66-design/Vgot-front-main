@@ -1,0 +1,227 @@
+/* 积分提醒组件样式 - Modern Redesign */
+
+.credit-alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.credit-alert-modal {
+  position: relative;
+  background: linear-gradient(90deg, #360c6e 0%, #120f2e 100%); /* Deep purple gradient based on user image */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 40px 32px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 
+    0 20px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  overflow: hidden;
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Close Button */
+.credit-alert-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.credit-alert-close:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #e5e7eb;
+}
+
+/* Icons */
+.credit-alert-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.credit-alert-icon svg {
+  position: relative;
+  z-index: 2;
+}
+
+.credit-alert-icon.insufficient {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2) inset;
+}
+
+.credit-alert-icon.upgrade {
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.2) inset;
+}
+
+.credit-alert-icon.daily-limit {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2) inset;
+}
+
+/* Typography */
+.credit-alert-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.credit-alert-message {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #9ca3af;
+  margin-bottom: 32px;
+}
+
+.credit-alert-message strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Feature List */
+.credit-alert-features {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.feature-item {
+  color: #d1d5db;
+  font-size: 14px;
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+}
+
+/* Actions */
+.credit-alert-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.credit-alert-actions button {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+}
+
+.credit-alert-btn-secondary {
+  background: transparent;
+  color: #9ca3af;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.credit-alert-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.credit-alert-btn-primary {
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.credit-alert-btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+.credit-alert-btn-gradient {
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+.credit-alert-btn-gradient:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .credit-alert-modal {
+    padding: 32px 24px;
+    width: 90%;
+  }
+
+  .credit-alert-actions {
+    flex-direction: column-reverse;
+  }
+
+  .credit-alert-actions button {
+    width: 100%;
+  }
+}

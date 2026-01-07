@@ -1,0 +1,535 @@
+.task-grid-panel {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 8px;
+}
+
+/* Default grid layout for result panel (HyperSell/Text/Image/Enhance)
+   Show multiple uniform cards in rows like screenshot #1. */
+.task-panel {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-auto-rows: 180px; /* uniform card height */
+  gap: 16px;
+  align-content: start;
+}
+
+/* Empty state: center content vertically and horizontally within the result area */
+.task-panel.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure each card fills its grid cell without stretching media */
+.task-panel .task-card { height: 100%; }
+
+/* =======================
+   EMPTY STATE (Unified)
+   ======================= */
+/* Text-only empty state centered within the panel */
+.empty-text-wrapper {
+  grid-column: 1 / -1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+
+.empty-title {
+  font-size: 21px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.empty-subtitle {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+}
+
+.task-grid-panel .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-auto-rows: 180px;
+  gap: 16px;
+  grid-auto-flow: row dense;
+}
+
+.task-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #cfcfcf;
+  opacity: 0.9;
+  gap: 12px;
+  padding: 24px 12px;
+}
+
+.task-empty .result-title {
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  margin-bottom: 8px;
+  font-size: 20px; /* larger title for empty state */
+}
+
+.task-empty .result-desc {
+  color: #bfbfbf;
+  font-size: 14px; /* larger description for readability */
+  text-align: center;
+}
+
+/* Empty icon size */
+.task-empty .icon,
+.task-empty svg {
+  width: 48px;
+  height: 48px;
+}
+
+/* Base Task Card */
+.task-card {
+  position: relative;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+/* Media Area */
+.task-media {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+
+.task-media video,
+.task-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+/* Portrait media (9:16): keep card size; height fills card, width scales down proportionally to maintain 9:16 without cropping */
+.task-media .media-portrait {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Center portrait media */
+.task-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Meta Info */
+/* Task meta overlay moved to top-left, non-interactive, to avoid blocking video controls */
+.task-meta.overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 4px 6px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  z-index: 5;
+  pointer-events: none; /* don't block video progress bar or controls */
+}
+
+.task-meta.overlay .row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.badge-text {
+  background: rgba(168, 85, 247, 0.1);
+  color: #d8b4fe;
+  border-color: rgba(168, 85, 247, 0.2);
+}
+
+.badge-image {
+  background: rgba(59, 130, 246, 0.1);
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.status {
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.status.s-queued { color: #fbbf24; }
+.status.s-running { color: #3b82f6; }
+.status.s-success { color: #4ade80; }
+.status.s-failed { color: #ef4444; }
+
+/* Progress Bar */
+.progress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.progress .bar {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.error {
+  margin-top: 6px;
+  color: #ef4444;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* Buttons */
+.btn-cancel,
+.btn-download {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.btn-cancel:hover,
+.btn-download:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-download {
+  right: auto;
+  left: 8px;
+}
+
+/* Delete button (top-right) */
+.btn-delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.2);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 11;
+  opacity: 0;
+  transform: translateY(-5px);
+  pointer-events: none;
+}
+
+.task-card:hover .btn-delete {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.btn-delete:hover {
+  /* Restore red hover to match design */
+  background: #ef4444;
+  border-color: #ef4444;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+/* =========================================
+   SPECIAL STATES
+   ========================================= */
+
+/* 1. FAILED STATE - Dim and Dull */
+.task-card.status-failed {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+  border-color: rgba(239, 68, 68, 0.2);
+  background: #0a0a0a;
+}
+
+.task-card.status-failed:hover {
+  opacity: 0.8;
+  filter: grayscale(0);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.task-card.status-failed .task-media {
+  opacity: 0.4;
+}
+
+/* 2. RUNNING/QUEUED STATE - Colorful Curtain/Glow */
+.task-card.status-running,
+.task-card.status-queued,
+.task-card.status-persisting {
+  border-color: transparent; /* Hide default border */
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); /* Soft purple glow */
+  background: #0f1115; /* Ensure bg is opaque */
+}
+
+/* Animated Gradient Border (The "Curtain" Effect) */
+.task-card.status-running::before,
+.task-card.status-queued::before,
+.task-card.status-persisting::before {
+  content: "";
+  position: absolute;
+  inset: -1px; /* Slightly larger than card */
+  z-index: -1;
+  background: linear-gradient(
+    135deg, 
+    #360c6e, 
+    #a855f7, 
+    #ec4899, 
+    #3b82f6, 
+    #360c6e
+  );
+  background-size: 300% 300%;
+  border-radius: 13px; /* Slightly larger radius */
+  animation: borderFlow 4s ease infinite;
+}
+
+/* Inner background to mask the center of the gradient */
+.task-card.status-running::after,
+.task-card.status-queued::after,
+.task-card.status-persisting::after {
+  content: "";
+  position: absolute;
+  inset: 1px; /* Border width */
+  background: #0f1115;
+  border-radius: 11px;
+  z-index: -1;
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Shimmer/Pulse Effect for the Media Placeholder */
+.task-card.status-running .task-media .placeholder,
+.task-card.status-queued .task-media .placeholder,
+.task-card.status-persisting .task-media .placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    110deg,
+    rgba(168, 85, 247, 0.05) 30%,
+    rgba(236, 72, 153, 0.15) 50%,
+    rgba(168, 85, 247, 0.05) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Fallback shimmer overlay even when .placeholder is not rendered */
+.task-card.status-running .task-media::before,
+.task-card.status-queued .task-media::before,
+.task-card.status-persisting .task-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(168,85,247,0.12) 25%,
+    rgba(255,255,255,0.18) 50%,
+    rgba(168,85,247,0.12) 75%,
+    rgba(255,255,255,0) 100%
+  );
+  animation: shimmer-move 1.6s infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+@keyframes shimmer-move {
+  0% { transform: translateX(-60%); opacity: 0.75; }
+  50% { transform: translateX(0%); opacity: 1; }
+  100% { transform: translateX(60%); opacity: 0.75; }
+}
+
+/* Add a subtle "Generating..." text overlay if needed */
+/* Running overlay text */
+.task-card.status-running .task-media::after {
+  content: "Generate Running...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: pulse 2s infinite;
+  text-align: center;
+  width: 100%;
+}
+
+/* Queued overlay text */
+.task-card.status-queued .task-media::after {
+  content: "Queued...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  animation: pulse 2s infinite;
+}
+
+/* Persisting overlay text (same effects as running) */
+.task-card.status-persisting .task-media::after {
+  content: "Persisting...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: pulse 2s infinite;
+  text-align: center;
+  width: 100%;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* 移除占位层内的本地 spinner；持久化文案改由 status-persisting 的 ::after 控制 */
+
+/* Single card mode for SuperIP */
+.task-panel.single-card-mode {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.task-panel.single-card-mode .task-card {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+}
+
+.task-panel.single-card-mode .task-media {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.task-panel.single-card-mode .task-media video,
+.task-panel.single-card-mode .task-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0;
+}
+
+.task-panel.single-card-mode .task-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Placeholder container for loading/error states */
+/* 默认占位样式保持轻量，避免影响其他页面（如 HyperSell） */
+.task-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.task-placeholder .spinner { display: none; }
+.task-placeholder .error-icon { font-size: 20px; }
+.task-placeholder .task-status-text { margin-top: 8px; font-size: 12px; color: rgba(0,0,0,0.7); }
+
+/* 移除旋转动画，统一使用闪烁遮罩表现生成中状态 */
+
+/* 仅在 SuperIP 的结果区域内覆盖更强的加载样式与深色背景 */
+.superip-result-panel .task-card { background: transparent; border: none; }
+.superip-result-panel .task-media { background: #000; }
+.superip-result-panel .task-placeholder { background: #000; color: #fff; flex-direction: column; }
+.superip-result-panel .task-placeholder .spinner { border-color: rgba(255,255,255,0.3); border-top-color: #fff; }
+.superip-result-panel .task-placeholder .task-status-text { color: rgba(255,255,255,0.85); letter-spacing: 0.5px; text-transform: uppercase; }
+
+/* History list compact hosting for TaskCard inside SuperIP video history */
+.video-history-item .task-card {
+  height: 100%;
+  border: none;           /* use outer history item's border */
+  background: transparent; /* blend with history card */
+  border-radius: 0;        /* follow outer radius */
+}
+
+.video-history-item .task-media {
+  height: 100%;
+}
+

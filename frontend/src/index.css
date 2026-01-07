@@ -1,0 +1,356 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Define CSS variables for the new design system */
+:root {
+  /* Colors */
+  --color-bg-primary: #020617;
+  --color-bg-secondary: #050816;
+  --color-bg-card: rgba(17, 24, 39, 0.6); /* Glassmorphism effect */
+  --color-border-default: #1f2937;
+  --color-border-hover: #4b5563;
+  --color-border-active: #a855f7;
+  --color-text-primary: #e5e7eb;
+  --color-text-secondary: #9ca3af;
+  --color-text-placeholder: #6b7280;
+  --color-accent-purple: #a855f7;
+  --color-accent-purple-support: #6366f1;
+  --color-accent-pink: #ec4899;
+  --color-accent-gold: #fbbf24;
+  --color-accent-gold-soft: #facc6b;
+
+  /* Typography */
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.6;
+
+  /* Gradients */
+  --gradient-button-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 45%, #ec4899 100%);
+  --gradient-button-hover: linear-gradient(135deg, #818cf8 0%, #c084fc 45%, #f472b6 100%);
+  --gradient-background-glow: radial-gradient(circle at top center, #4c1d95 0%, #020617 40%, #020617 100%);
+
+  /* Shadows & Glows */
+  --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glow-border-purple: 0 0 0 1px var(--color-accent-purple), 0 0 18px rgba(168, 85, 247, 0.6);
+  --glow-border-gold: 0 0 0 1px var(--color-accent-gold), 0 0 18px rgba(251, 191, 36, 0.6);
+  --glow-button-hover: 0 0 20px rgba(192, 132, 252, 0.5);
+
+  /* Rounded Corners */
+  --border-radius-card: 20px;
+  --border-radius-input: 12px;
+  --border-radius-button-pill: 9999px;
+
+  /* Shadcn UI Variables (Mapped to match Shouye/Dark Theme) */
+  --background: 240 10% 3.9%; /* #05050f approx */
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 270 95% 65%; /* Purple */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 270 95% 65%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 270 95% 65%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 270 95% 65%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-primary);
+  background-image: var(--gradient-background-glow);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--color-text-primary);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+input, textarea {
+  font-family: inherit;
+  outline: none;
+}
+
+/* 全局禁用 textarea 拉伸（防止用户拖拽改变高度导致布局跳动） */
+textarea { resize: none; }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ========== 美化滚动条 ========== */
+/* 侧边栏专用滚动条样式 */
+[data-sidebar="content"] {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  overflow-y: auto !important;
+}
+
+/* 侧边栏滚动条宽度 */
+[data-sidebar="content"]::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* 侧边栏滚动条轨道 - 默认完全透明 */
+[data-sidebar="content"]::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+/* 侧边栏滚动条滑块 - 默认完全透明 */
+[data-sidebar="content"]::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 4px;
+  border: none;
+}
+
+/* 鼠标悬停侧边栏容器 - 滚动条淡入显示 */
+[data-sidebar="content"]:hover::-webkit-scrollbar-track {
+  background-color: rgba(17, 24, 39, 0.15);
+  transition: background-color 0.5s ease;
+}
+
+[data-sidebar="content"]:hover::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #a855f7 0%,
+    #ec4899 100%
+  );
+  transition: background 0.5s ease, box-shadow 0.3s ease;
+}
+
+/* Firefox 支持 */
+[data-sidebar="content"]:hover {
+  scrollbar-color: #a855f7 rgba(17, 24, 39, 0.15);
+}
+
+/* 滚动条滑块本身悬停 - 颜色加深 + 发光 */
+[data-sidebar="content"]:hover::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    #c084fc 0%,
+    #f472b6 100%
+  );
+  box-shadow: 
+    0 0 10px rgba(168, 85, 247, 0.6),
+    0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+/* 滚动条滑块激活/拖动 - 最亮状态 */
+[data-sidebar="content"]::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(
+    180deg,
+    #d8b4fe 0%,
+    #fbcfe8 100%
+  ) !important;
+  box-shadow: 
+    0 0 15px rgba(168, 85, 247, 0.8),
+    0 0 25px rgba(168, 85, 247, 0.5) !important;
+}
+
+/* 通用滚动条样式 */
+*:not([data-sidebar="content"])::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+*:not([data-sidebar="content"])::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+*:not([data-sidebar="content"])::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+}
+
+/* 其他元素悬停时显示滚动条 */
+*:not([data-sidebar="content"]):hover::-webkit-scrollbar-track {
+  background: rgba(17, 24, 39, 0.2);
+}
+
+*:not([data-sidebar="content"]):hover::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(168, 85, 247, 0.6) 0%,
+    rgba(236, 72, 153, 0.6) 100%
+  );
+}
+
+/* 滚动条滑块悬停效果 */
+*:hover::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    to bottom,
+    rgba(168, 85, 247, 0.9),
+    rgba(236, 72, 153, 0.9)
+  );
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+/* 滚动条滑块激活/拖动效果 */
+*:hover::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(
+    to bottom,
+    rgba(168, 85, 247, 1),
+    rgba(236, 72, 153, 1)
+  );
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
+}
+
+/* Firefox 滚动条样式 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.6) rgba(17, 24, 39, 0.3);
+}
+
+/* 美化侧边栏分隔线 */
+[data-slot="sidebar-container"] {
+  position: relative;
+}
+
+/* 侧边栏右侧边框美化 - 渐变发光效果 */
+[data-side="left"][data-slot="sidebar-container"]::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(168, 85, 247, 0.3) 10%,
+    rgba(168, 85, 247, 0.5) 50%,
+    rgba(168, 85, 247, 0.3) 90%,
+    transparent 100%
+  );
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  transition: all 0.3s ease;
+}
+
+/* 悬停时增强发光效果 */
+[data-side="left"][data-slot="sidebar-container"]:hover::after {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(168, 85, 247, 0.5) 10%,
+    rgba(168, 85, 247, 0.8) 50%,
+    rgba(168, 85, 247, 0.5) 90%,
+    transparent 100%
+  );
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+  width: 2px;
+}
+
+/* 移除原始边框 */
+[data-side="left"][data-slot="sidebar-container"] {
+  border-right: none !important;
+}
+
+[data-side="right"][data-slot="sidebar-container"] {
+  border-left: none !important;
+}
+
+/* 右侧边栏同样处理 */
+[data-side="right"][data-slot="sidebar-container"]::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(168, 85, 247, 0.3) 10%,
+    rgba(168, 85, 247, 0.5) 50%,
+    rgba(168, 85, 247, 0.3) 90%,
+    transparent 100%
+  );
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  transition: all 0.3s ease;
+}
+
+[data-side="right"][data-slot="sidebar-container"]:hover::after {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(168, 85, 247, 0.5) 10%,
+    rgba(168, 85, 247, 0.8) 50%,
+    rgba(168, 85, 247, 0.5) 90%,
+    transparent 100%
+  );
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+  width: 2px;
+}
+
+/* Hide default password reveal button in Edge/IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Hide default password reveal button in Chrome/Edge/Safari */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+}
+

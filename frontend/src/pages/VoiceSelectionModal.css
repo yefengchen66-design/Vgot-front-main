@@ -1,0 +1,805 @@
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 240px; /* 从侧边栏右边开始，侧边栏宽度为240px */
+  right: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* 提高z-index确保在缩小状态下也能显示 */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 700px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tab-container {
+  display: flex;
+  gap: 0;
+}
+
+.modal-content .tab-button {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #999;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.modal-content .tab-button.active {
+  color: #333;
+  border-bottom-color: #4CAF50;
+}
+
+.modal-content .tab-button:hover:not(.active) {
+  color: #666;
+}
+
+.modal-content .close-button {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-content .close-button:hover {
+  color: #333;
+}
+
+.modal-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 2px !important;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+.search-container {
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-content .search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 13px;
+  box-sizing: border-box;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.modal-content .search-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.modal-content .search-input::placeholder {
+  color: #999;
+}
+
+/* 音色列表 - 填充整个容器 */
+.modal-content .voice-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.modal-content .voice-list::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+.modal-content .voice-list::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.modal-content .voice-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 2px !important;
+}
+
+.modal-content .voice-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+.modal-content .voice-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f8f8f8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-content .voice-item:hover {
+  background: #f8f8f8;
+}
+
+.modal-content .voice-item.selected {
+  background: #e8f5e8;
+  border-left: 3px solid #4CAF50;
+}
+
+.modal-content .voice-play-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #4CAF50;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.modal-content .voice-play-button:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+
+.modal-content .voice-info {
+  flex: 1;
+}
+
+.modal-content .voice-info h3 {
+  margin: 0 0 2px 0;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modal-content .voice-description {
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* 自定义页面样式 */
+.modal-content .custom-content {
+  display: flex;
+  height: 100%;
+  flex: 1;
+  padding: 45px;
+  gap: 45px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modal-content .custom-content::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+.modal-content .custom-content::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.modal-content .custom-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 2px !important;
+}
+
+.modal-content .custom-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+.modal-content .custom-left {
+  flex: 1;
+  background: #f8f8f8;
+  border-radius: 8px;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.modal-content .custom-right {
+  flex: 1;
+  background: #f8f8f8;
+  border-radius: 8px;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.modal-content .custom-right::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+.modal-content .custom-right::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.modal-content .custom-right::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 2px !important;
+}
+
+.modal-content .custom-right::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+.modal-content .custom-form {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.modal-content .custom-form h3 {
+  margin: 0 0 24px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-content .form-group {
+  margin-bottom: 16px;
+}
+
+.modal-content .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modal-content .form-group input,
+.modal-content .form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.modal-content .form-group input:focus,
+.modal-content .form-group textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.modal-content .form-group textarea {
+  min-height: 80px;
+  resize: none;
+}
+
+.modal-content .image-upload-section {
+  margin-bottom: 16px;
+}
+
+.modal-content .image-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.modal-content .image-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f8f8;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-content .image-preview:hover:not(.disabled) {
+  border-color: #4CAF50;
+  background: #f8fff8;
+}
+
+.modal-content .image-preview.disabled {
+  opacity: 0.6;
+  background: #f0f0f0;
+  cursor: not-allowed !important;
+}
+
+.modal-content .image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-content .image-preview .placeholder {
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+}
+
+.modal-content .image-delete-button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.modal-content .image-preview:hover .image-delete-button {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content .image-delete-button:hover {
+  background: rgba(244, 67, 54, 0.8);
+  transform: scale(1.1);
+}
+
+.modal-content .image-upload-info {
+  flex: 1;
+}
+
+.modal-content .image-upload-info p {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modal-content .image-upload-info small {
+  color: #666;
+  font-size: 12px;
+}
+
+.modal-content .image-upload-button {
+  padding: 8px 16px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-content .image-upload-button:hover {
+  background: #45a049;
+}
+
+.modal-content .upload-progress {
+  width: 100%;
+  height: 4px;
+  background: #f0f0f0;
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.modal-content .upload-progress-bar {
+  height: 100%;
+  background: #4CAF50;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.modal-content .upload-area {
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.modal-content .upload-area:hover {
+  border-color: #4CAF50;
+  background: #f8fff8;
+}
+
+.modal-content .upload-area p {
+  margin: 0 0 16px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.modal-content .upload-button {
+  padding: 8px 16px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-content .upload-button:hover {
+  background: #45a049;
+}
+
+.modal-content .create-button {
+  width: 100%;
+  padding: 14px 24px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 16px;
+}
+
+.modal-content .create-button:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+}
+
+.modal-content .preview-panel {
+  width: 100%;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.modal-content .preview-panel h3 {
+  margin: 0 0 24px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-content .preview-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.modal-content .preview-play-button {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #4CAF50;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+  font-size: 32px;
+}
+
+.modal-content .preview-play-button:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+
+.modal-content .preview-area p {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.modal-content .preview-info {
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-top: 20px;
+  flex-shrink: 0;
+  text-align: left;
+}
+
+.modal-content .preview-info p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.no-voices {
+  text-align: center;
+  padding: 60px 32px;
+  color: #999;
+  font-size: 15px;
+}
+
+.no-voices {
+  text-align: center;
+  padding: 60px 32px;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-overlay {
+    left: 0; /* 在小屏幕上占据整个屏幕宽度 */
+  }
+
+  .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    max-width: 600px;
+    max-height: 90vh;
+  }
+
+  .modal-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 24px 16px 24px;
+  }
+
+  .tab-container {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tab-button {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .custom-content {
+    flex-direction: column;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .modal-filters {
+    padding: 16px 24px;
+  }
+
+  .voice-list {
+    padding: 8px 24px 24px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    left: 0; /* 在小屏幕上占据整个屏幕宽度 */
+  }
+
+  .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 98%;
+    border-radius: 4px;
+  }
+
+  .tab-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .close-button {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+
+  .voice-item {
+    padding: 12px 16px;
+  }
+
+  .custom-content {
+    padding: 16px;
+  }
+}
+
+/* 强制应用超细深色滚动条样式 - 最高优先级 */
+.voice-list,
+.modal-body,
+.custom-content,
+.custom-right,
+.modal-content .voice-list,
+.modal-content .modal-body,
+.modal-content .custom-content,
+.modal-content .custom-right {
+  /* Firefox */
+  scrollbar-width: thin !important;
+  scrollbar-color: #6b7280 #0f1116 !important;
+}
+
+/* Webkit浏览器 (Chrome, Safari, Edge) - 超细深色样式 */
+.voice-list::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+.custom-content::-webkit-scrollbar,
+.custom-right::-webkit-scrollbar,
+.modal-content .voice-list::-webkit-scrollbar,
+.modal-content .modal-body::-webkit-scrollbar,
+.modal-content .custom-content::-webkit-scrollbar,
+.modal-content .custom-right::-webkit-scrollbar {
+  width: 2px !important;
+  height: 2px !important;
+}
+
+.voice-list::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track,
+.custom-content::-webkit-scrollbar-track,
+.custom-right::-webkit-scrollbar-track,
+.modal-content .voice-list::-webkit-scrollbar-track,
+.modal-content .modal-body::-webkit-scrollbar-track,
+.modal-content .custom-content::-webkit-scrollbar-track,
+.modal-content .custom-right::-webkit-scrollbar-track {
+  background: #0f1116 !important; /* 深色轨道，避免显示白色底色 */
+  border-radius: 2px !important;
+  margin: 4px 0 !important;
+}
+
+.voice-list::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb,
+.custom-content::-webkit-scrollbar-thumb,
+.custom-right::-webkit-scrollbar-thumb,
+.modal-content .voice-list::-webkit-scrollbar-thumb,
+.modal-content .modal-body::-webkit-scrollbar-thumb,
+.modal-content .custom-content::-webkit-scrollbar-thumb,
+.modal-content .custom-right::-webkit-scrollbar-thumb {
+  background: #6b7280 !important; /* 更接近图例的中灰色 */
+  border-radius: 1px !important;
+}
+
+.voice-list::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover,
+.custom-content::-webkit-scrollbar-thumb:hover,
+.custom-right::-webkit-scrollbar-thumb:hover,
+.modal-content .voice-list::-webkit-scrollbar-thumb:hover,
+.modal-content .modal-body::-webkit-scrollbar-thumb:hover,
+.modal-content .custom-content::-webkit-scrollbar-thumb:hover,
+.modal-content .custom-right::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af !important;
+}
+
+/* 页面级滚动条（右侧全局滚动条） */
+html, body {
+  scrollbar-width: thin !important;
+  scrollbar-color: #6b7280 #0f1116 !important;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 8px !important; /* 右侧全局滚动条略宽，便于拖拽 */
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: #0f1116 !important;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: #6b7280 !important;
+  border-radius: 4px !important;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af !important;
+}
+
+/* 专用于“音色选择”区域：与历史侧边栏一致（始终可见） */
+.modal-content .voice-list,
+.modal-content .modal-body,
+.modal-content .custom-content,
+.modal-content .custom-right {
+  scrollbar-width: thin !important; /* Firefox */
+  scrollbar-color: #3a3a3a #1a1a1a !important; /* thumb / track */
+}
+.modal-content .voice-list::-webkit-scrollbar,
+.modal-content .modal-body::-webkit-scrollbar,
+.modal-content .custom-content::-webkit-scrollbar,
+.modal-content .custom-right::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+.modal-content .voice-list::-webkit-scrollbar-track,
+.modal-content .modal-body::-webkit-scrollbar-track,
+.modal-content .custom-content::-webkit-scrollbar-track,
+.modal-content .custom-right::-webkit-scrollbar-track {
+  background: #1a1a1a !important;
+  border-radius: 3px !important;
+}
+.modal-content .voice-list::-webkit-scrollbar-thumb,
+.modal-content .modal-body::-webkit-scrollbar-thumb,
+.modal-content .custom-content::-webkit-scrollbar-thumb,
+.modal-content .custom-right::-webkit-scrollbar-thumb {
+  background: #3a3a3a !important;
+  border-radius: 3px !important;
+}
+.modal-content .voice-list::-webkit-scrollbar-thumb:hover,
+.modal-content .modal-body::-webkit-scrollbar-thumb:hover,
+.modal-content .custom-content::-webkit-scrollbar-thumb:hover,
+.modal-content .custom-right::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a !important;
+}

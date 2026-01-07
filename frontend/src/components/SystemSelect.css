@@ -1,0 +1,84 @@
+.system-select {
+  position: relative;
+  width: 100%;
+}
+
+.system-select__button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.system-select__button:hover {
+  background: var(--color-bg-primary);
+  border-color: var(--color-border-hover);
+}
+.system-select__button:focus-visible {
+  outline: none;
+  background: var(--color-bg-primary);
+  border-color: var(--color-border-active);
+}
+.system-select__button[aria-disabled="true"] {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+.system-select__chevron {
+  margin-left: 8px;
+  flex: 0 0 auto;
+  width: 10px;   /* smaller chevron */
+  height: 10px;  /* smaller chevron */
+  border: solid var(--color-text-secondary);
+  border-width: 0 1.5px 1.5px 0; /* a touch thinner */
+  transform: rotate(45deg);
+}
+
+.system-select__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  z-index: 40;
+  padding: 6px; /* 留出列表内边距，让选项之间能形成“空隙” */
+}
+
+.system-select__option {
+  padding: 10px 12px;
+  margin: 4px; /* 每项之间增加空隙 */
+  border-radius: 8px; /* 单项自己圆角，因有空隙不会再出现拼接缺口 */
+  color: var(--color-text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+.system-select__option:hover { background: var(--color-bg-primary); }
+.system-select__option[aria-selected="true"] { background: var(--color-bg-primary); }
+.system-select__option[aria-disabled="true"] {
+  color: var(--color-text-placeholder);
+  cursor: not-allowed;
+}
+
+/* 键盘聚焦可见性 */
+.system-select__option:focus-visible {
+  outline: 1px solid var(--color-border-hover);
+  outline-offset: 0;
+}
+
+/* Scrollbar subtle */
+.system-select__menu::-webkit-scrollbar { width: 8px; height: 8px; }
+.system-select__menu::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 8px; }
+.system-select__menu::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 8px; }
