@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Loader2, Play, Pause, Settings, X, Upload, Trash2, RefreshCw } from 'lucide-react';
 import { useSupabaseUpload } from '../hooks/useSupabaseUpload';
@@ -202,6 +202,7 @@ export default function SuperIP() {
   const [cloneAudioUrl, setCloneAudioUrl] = useState('');
   const [isCloning, setIsCloning] = useState(false);
   const [isCloneSettingsOpen, setCloneSettingsOpen] = useState(false);
+  const [cloneNameError, setCloneNameError] = useState(''); // 红字提示命名不符合规则
 
   // 生成视频页面的状态
   const [videoPrompt, setVideoPrompt] = useState('');
@@ -1045,12 +1046,23 @@ export default function SuperIP() {
   const doVoiceClone = async () => {
     if (!cloneFileId) { alert('Please upload an audio file for cloning first'); return; }
     setIsCloning(true);
+    setCloneNameError(''); // 清除之前的错误
     try {
       const token = localStorage.getItem('token');
       const payload = { file_id: cloneFileId, text: "This voice sounds natural and pleasant." };
       // 允许用户点击“修改系统默认命名”后自定义 voice_id
-      if (cloneAllowEditName && cloneVoiceIdInput && cloneVoiceIdInput.trim()) {
-        payload.voice_id = cloneVoiceIdInput.trim();
+      // 验证命名规则: 8-256字符, 字母开头, 仅含字母/数字/-/_
+      const trimmedName = (cloneVoiceIdInput || '').trim();
+      const isValidName = trimmedName.length >= 8 && trimmedName.length <= 256 && /^[a-zA-Z][a-zA-Z0-9_-]*$/.test(trimmedName);
+      
+      if (cloneAllowEditName && trimmedName) {
+        if (isValidName) {
+          payload.voice_id = trimmedName;
+          payload.auto_name = false;
+        } else {
+          payload.auto_name = true;
+          setCloneNameError('命名格式不符合规则(8-256字符,字母开头,仅含字母/数字/-/_), 已使用系统默认命名');
+        }
       } else {
         payload.auto_name = true;
       }
@@ -2488,16 +2500,52 @@ export default function SuperIP() {
                           <input 
                             className="popover-input" 
                             value={cloneVoiceIdInput} 
-                            onChange={e => setCloneVoiceIdInput(e.target.value)} 
+                            onChange={e => { setCloneVoiceIdInput(e.target.value); setCloneNameError(''); }} 
                             placeholder={t('superIP.clone.autoNamePlaceholder')}
                           />
                           <button 
                             className="btn-primary btn-compact" 
-                            onClick={() => { setCloneAllowEditName(!!cloneVoiceIdInput); setCloneSettingsOpen(false); }}
+                            onClick={() => { 
+                              const trimmed = (cloneVoiceIdInput || '').trim();
+                              const isValid = trimmed.length >= 8 && trimmed.length <= 256 && /^[a-zA-Z][a-zA-Z0-9_-]*$/.test(trimmed);
+                              if (trimmed && !isValid) {
+                                setCloneNameError(lang === 'zh' ? '⚠️ 命名格式不符合规则，将使用系统默认命名' 
+                                  : lang === 'zh-TW' ? '⚠️ 命名格式不符合規則，將使用系統預設命名'
+                                  : lang === 'en' ? '⚠️ Invalid format, will use system default name'
+                                  : '⚠️ Formato inválido, se usará el nombre predeterminado');
+                              } else {
+                                setCloneNameError('');
+                              }
+                              setCloneAllowEditName(!!cloneVoiceIdInput); 
+                              setCloneSettingsOpen(false); 
+                            }}
                           >
                             {lang === 'zh' ? '确定' : lang === 'zh-TW' ? '確定' : lang === 'en' ? 'Confirm' : 'Confirmar'}
                           </button>
                         </div>
+                        {/* 实时验证提示 - 在弹窗内显示 */}
+                        {cloneVoiceIdInput && (() => {
+                          const trimmed = (cloneVoiceIdInput || '').trim();
+                          const isValid = trimmed.length >= 8 && trimmed.length <= 256 && /^[a-zA-Z][a-zA-Z0-9_-]*$/.test(trimmed);
+                          if (!isValid) {
+                            return (
+                              <p style={{ color: '#ff4d4f', fontSize: 10, marginTop: 6, fontWeight: 'bold' }}>
+                                {lang === 'zh' ? '⚠️ 格式不符: 需8-256字符，字母开头，仅限字母/数字/-/_' 
+                                  : lang === 'zh-TW' ? '⚠️ 格式不符: 需8-256字元，字母開頭，僅限字母/數字/-/_'
+                                  : lang === 'en' ? '⚠️ Invalid: 8-256 chars, start with letter, only letters/numbers/-/_'
+                                  : '⚠️ Inválido: 8-256 caracteres, comenzar con letra, solo letras/números/-/_'}
+                              </p>
+                            );
+                          }
+                          return (
+                            <p style={{ color: '#52c41a', fontSize: 10, marginTop: 6, fontWeight: 'bold' }}>
+                              {lang === 'zh' ? '符合命名规范，点击确定保存voice_id' 
+                                : lang === 'zh-TW' ? '符合命名規範，點擊確定保存voice_id'
+                                : lang === 'en' ? 'Valid format, click Confirm to save voice_id' 
+                                : 'Formato válido, haz clic en Confirmar para guardar voice_id'}
+                            </p>
+                          );
+                        })()}
                       </div>
                     </div>
                   )}
@@ -2508,6 +2556,13 @@ export default function SuperIP() {
                   <div className="clone-player-wrapper">
                     <CustomAudioPlayer src={cloneAudioUrl} />
                   </div>
+                )}
+                
+                {/* 红字警告: 命名不符合规则 */}
+                {cloneNameError && (
+                  <p style={{ color: '#ff4d4f', fontSize: 11, marginTop: 6, marginLeft: 4, fontWeight: 'bold' }}>
+                    ⚠️ {cloneNameError}
+                  </p>
                 )}
                 
                 <p style={{ color: '#666', fontSize: 11, marginTop: 6, marginLeft: 4 }}>
@@ -3177,3 +3232,4 @@ export default function SuperIP() {
     </div>
   );
 }
+
