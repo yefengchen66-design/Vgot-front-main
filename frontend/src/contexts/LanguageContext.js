@@ -69,8 +69,17 @@ export function LanguageProvider({ children }) {
   };
 
   const t = (key, fallback) => {
-    const v = get(messages?.[lang], key);
+    // First, try to resolve the key in the current language (e.g., 'zh')
+    let v = get(messages?.[lang], key);
     if (typeof v === 'string') return v;
+
+    // Fallback for complex keys: if 'zh' fails, try 'en' as a default
+    if (lang !== 'en') {
+      v = get(messages?.en, key);
+      if (typeof v === 'string') return v;
+    }
+    
+    // If all else fails, return the fallback or the key itself
     return fallback || key;
   };
 
