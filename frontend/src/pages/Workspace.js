@@ -6,6 +6,8 @@ import './Workspace.css';
 import { useLanguage } from '../contexts/LanguageContext';
 import { toast } from 'sonner';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+
 function Workspace() {
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -68,7 +70,7 @@ function Workspace() {
   // 从 API 获取数据
   const fetchFromAPI = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/hot-inspirations');
+      const response = await fetch(`${API_BASE_URL}/api/hot-inspirations`);
       if (response.ok) {
         const data = await response.json();
         setInspirations(data);
